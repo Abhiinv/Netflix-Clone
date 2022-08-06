@@ -5,6 +5,8 @@ import './Banner.css';
 
 function Banner() {
     const [movie, SetMovie] = useState([]);
+    const title = (movie?.title || movie?.name || movie?.original_name)?.toUpperCase() || '';
+    const release_date = (movie?.first_air_date)?.substr(0,4) || '';
     function truncate(str, n) {
         return str?.length > n ? str.substr(0, n - 1) + '...' : str;
     }
@@ -20,34 +22,37 @@ function Banner() {
         fetchData();
     }, []);
     console.log({movie});
-
     return (
         <header className="banner" style={{
             backgroundSize: "cover",
-            backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie?.backdrop_path}")`,
+            backgroundImage: `linear-gradient(270deg, transparent, rgba(37, 37, 37, 0), #111), url("https://image.tmdb.org/t/p/original${movie?.backdrop_path}")`,
             backgroundPosition: "center center",
         }}>
             <div className="banner__contents">
                 <h1 className="banner__title">
-                    {movie?.title || movie?.name || movie?.original_name}
+                    {title}
                 </h1>
+                <div className="banner__information">
+                    <div className="banner__data">
+                        <p className="banner__rating">
+                            {movie?.vote_average}
+                        </p>
+                        <p className="banner__country">
+                            {movie?.origin_country}
+                        </p>
+                        <p className="banner__release-date">
+                            {release_date}
+                        </p>
+                    </div>
+                    <p className="banner__description">
+                        {truncate(movie?.overview, 250)}
+                    </p>
+                </div>
                 <div className="banner__buttons">
                     <button className="banner__button">Play</button>
                     <button className="banner__button">My List</button>
                 </div>
-                <div className="banner__information">
-                    <p className="banner__description">
-                        {truncate(movie?.overview, 250)}
-                    </p>
-                    <p className="banner__release-date">
-                        Release Date: {movie?.first_air_date}
-                    </p>
-                    <p className="banner__rating">
-                        Rating: {movie?.vote_average}
-                    </p>
-                </div>
             </div>
-            <div className="banner--fadeBottom" />
         </header>
     )
 }
